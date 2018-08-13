@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <input class="form-control" id="myInput" type="text" placeholder="Filter..">
+    <table class="table table-striped table-fixed">
+        <tbody id="logTable">
+        {% for line in logs %}
+            <tr>
+                <td>{{ line }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+    <script>
+        $(document).ready(function () {
+            $("#myInput").on("keyup", function () {
+                const value = $(this).val().toLowerCase();
+                $("#logTable tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+{% endblock %}
+

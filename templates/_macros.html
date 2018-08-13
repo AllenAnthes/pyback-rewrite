@@ -1,0 +1,25 @@
+{% macro form_field(field) %}
+    {% if field.type == 'StringField' %}
+        <div class="form-group input-field">{{ field.label(class="form-control-label") }} {{ field(class="form-control mb-4") }}</div>
+    {% endif %}
+
+    {% if field.type == 'BooleanField' %}
+        {{ field.label(class="form-control-label") }}
+        <div class="switch">
+            <label>
+                No
+                {{ field(class="form-control mb-4") }}
+                <span class="lever"></span>
+                Yes
+            </label>
+        </div>
+    {% endif %}
+    {% if field.errors %}
+        <div class="invalid">
+            {% for error in field.errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+{% endmacro %}

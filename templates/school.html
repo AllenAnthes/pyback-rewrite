@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% import "_macros.html" as util %}
+
+{% block styles %}
+    {{ super() }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.css">
+{% endblock %}
+{% block app_content %}
+
+    <div class="card mt-5">
+        <form action="{{ url_for('school') }}" method="POST" id="new_school_form" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+
+            <div class="row">
+                <div class="col-md-4 col-md-offset-4">
+                    <legend>Code School</legend>
+
+                    {{ util.form_field(form.name) }}
+                    {{ util.form_field(form.url) }}
+                    {{ util.form_field(form.fulltime) }}
+                    {{ util.form_field(form.hardware) }}
+                    {{ util.form_field(form.has_online) }}
+                    {{ util.form_field(form.only_online) }}
+                    {{ util.form_field(form.accredited) }}
+                </div>
+                <div class="col-md-4 col-md-offset-4">
+                    <legend>Contact Details</legend>
+
+                    {{ util.form_field(form.rep_name) }}
+                    {{ util.form_field(form.rep_email) }}
+                    {{ util.form_field(form.address1) }}
+                    {{ util.form_field(form.address2) }}
+                    {{ util.form_field(form.city) }}
+                    {{ util.form_field(form.state) }}
+                    {{ util.form_field(form.zipcode) }}
+                    {{ util.form_field(form.country) }}
+                </div>
+
+                <div class="col-md-4 col-md-offset-4">
+                    <legend>School Logo</legend>
+
+                    <div class="dropzone mb-2" id="logo-dropzone"></div>
+
+                    {{ form.recaptcha }}
+                </div>
+
+            </div>
+            <button type="submit" class="btn btn-info">Submit</button>
+
+        </form>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js"></script>
+    <script src="{{ url_for('static', filename='js/codeschool.js') }}"></script>
+{% endblock %}

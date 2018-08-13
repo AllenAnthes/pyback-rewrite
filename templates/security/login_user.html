@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block styles %}
+    {{ super() }}
+    <link href="{{ url_for('static', filename='css/auth.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}
+    Login
+{% endblock %}
+
+{% block app_content %}
+    <div class="card mt-5 auth-card">
+        <form class="text-center border border-light p-5" action="{{ url_for('security.login') }}" method="POST"
+              name="login_user_form">
+            <p class="h4 mb-4">Sign in</p>
+            <div class="card-body px-lg-5 pt-0">
+                {{ login_user_form.hidden_tag() }}
+
+                <div class="md-form form-group required">{{ login_user_form.email.label(class="form-control-label") }} {{ login_user_form.email(class="form-control mb-4") }}</div>
+                {% if login_user_form.email.errors %}
+                    <div class="invalid">
+                        {% for error in login_user_form.email.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <div class="md-form form-group required">{{ login_user_form.password.label(class="form-control-label") }} {{ login_user_form.password(class="form-control mb-4") }}</div>
+                {% if login_user_form.password.errors %}
+                    <div class="invalid">
+                        {% for error in login_user_form.password.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <div class="d-flex justify-content-around">
+                    <div class="form-group">
+                        <label for="remember">
+                            {{ login_user_form.remember }}
+                            <span>Remember</span>
+                        </label>
+                    </div>
+
+                </div>
+            </div>
+            <button type="submit" class="btn btn-info">Sign in</button>
+
+        </form>
+    </div>
+{% endblock %}
+
+
+<div class="invalid-feedback">
+    Please choose a username.
+</div>

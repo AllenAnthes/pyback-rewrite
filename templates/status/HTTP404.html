@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Simple HttpErrorPages | MIT License | https://github.com/AndiDittrich/HttpErrorPages -->
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>404 - Resource not found</title>
+    {#    normalize.css v5.0.0 | MIT License | github.com/necolas/normalize.css#}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/errors.css') }}">
+
+</head>
+<body>
+<div class="cover">
+    <h1>Resource not found
+        <small>Error 404</small>
+    </h1>
+    <p class="lead">The requested resource could not be found but may be available again in the future.</p></div>
+<footer><p>Technical Contact: <a href="mailto:x@example.com">x@example.com</a></p></footer>
+</body>
+</html>
+{#{% extends 'base.html' %}#}
+{#{% block title %}#}
+{#    Page Not Found#}
+{#{% endblock %}#}
+{#{% block styles %}#}
+{#    <link href="{{ bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap') }}" rel="stylesheet">#}
+{#    <link rel="stylesheet" href="{{ url_for('static', filename='errors.css') }}">#}
+{#{% endblock %}#}
+{#{% block content %}#}
+{#    <article>#}
+{#        <h1>Not found </h1>#}
+{#        <div>#}
+{#            <p>Sorry, but the page you were trying to view does not exist.</p>#}
+{#            <p>It looks like this was the result of either:</p>#}
+{#            <ul>#}
+{#                <li>a mistyped address</li>#}
+{#                <li>an out-of-date link</li>#}
+{#            </ul>#}
+{#        </div>#}
+{#    </article>#}
+{#{% endblock %}#}
