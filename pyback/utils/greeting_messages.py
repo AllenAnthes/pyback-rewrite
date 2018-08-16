@@ -104,7 +104,7 @@ def greet_button_template(original_message, channel, message_ts) -> dict:
         'text': original_message['text'],
         'channel': channel['id'],
         'ts': message_ts,
-        'as_user': True
+        # 'as_user': True
     }
 
 

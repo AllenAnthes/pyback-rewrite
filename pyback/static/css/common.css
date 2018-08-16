@@ -6,6 +6,10 @@
     text-align: left;
 }
 
+.bg-light {
+  background-color: #f8f9fa !important;
+}
+
 .nav-link {
     padding-bottom: 0;
     margin-bottom: .2rem;

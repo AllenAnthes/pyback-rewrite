@@ -1,13 +1,12 @@
-from datetime import datetime, timedelta
-import os
-import logging
 from flask import url_for, redirect, render_template
+from datetime import datetime, timedelta
 from itertools import chain
+import os
 
-from pyback import db
 from pyback.database.models import TemporaryUrl, User
+from pyback import db, app
 
-logger = logging.getLogger(__name__)
+logger = app.logger
 
 
 def get_temporary_url(user_id: str, text: str) -> TemporaryUrl:

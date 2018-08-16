@@ -1,1 +1,1 @@
-from pyback import app as application
+from pyback import app

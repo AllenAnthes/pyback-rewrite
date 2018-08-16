@@ -1,13 +1,16 @@
+const url = document.getElementById('new_school_form').action;
+
 Dropzone.options.logoDropzone = {
-    url: "{{ url_for('school') }}",
+    url: url,
     paramName: 'logo',
     autoProcessQueue: false,
     acceptedFiles: 'image/*',
     addRemoveLinks: true,
+    hiddenInputContainer: '#new_school_form',
     init: function () {
+        this.on("thumbnail", checkDimensions);
         this.on('sending', addFieldsToPayload);
         this.on('success', redirectToIssues);
-        this.on("thumbnail", checkDimensions);
         $('#new_school_form').submit(e => {
             e.preventDefault();
             this.processQueue();
@@ -16,9 +19,9 @@ Dropzone.options.logoDropzone = {
     accept: bindCallback,
 };
 
-function redirectToIssues(file, response) {
-    if (response.code === 302)
-        window.location.href = response.redirect;
+function bindCallback(file, done) {
+    file.acceptDimensions = done;
+    file.rejectDimensions = () => done("Logo must be 200x200");
 }
 
 function checkDimensions(file) {
@@ -35,8 +38,11 @@ function addFieldsToPayload(data, xhr, formData) {
         .forEach(field => formData.append(field.name, field.value));
 }
 
-function bindCallback(file, done) {
-    file.acceptDimensions = done;
-    file.rejectDimensions = () => done("Logo must be 200x200");
-
+function redirectToIssues(file, response) {
+    if (response.redirect !== undefined) {
+        window.location.href = response.redirect;
+    }
+    else {
+        console.log(response);
+    }
 }

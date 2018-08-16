@@ -1,13 +1,11 @@
-import logging
-
-from pyback.external.airtable_client import Airtable
-from pyback.utils.action_menu_messages import suggestion_modal, action_menu_message
-from pyback.utils.greeting_messages import *
-from pyback.external.slack_client import Slack
-from pyback import app
 from pyback.utils.mentor_request_messages import mentee_claimed, mentee_unclaimed, base_claim_message
+from pyback.utils.action_menu_messages import suggestion_modal, action_menu_message
+from pyback.external.airtable_client import Airtable
+from pyback.external.slack_client import Slack
+from pyback.utils.greeting_messages import *
+from pyback import app
 
-logger = logging.getLogger(__name__)
+logger = app.logger
 
 
 def new_member(user, **other):
@@ -18,7 +16,7 @@ def new_member(user, **other):
     community_message = new_member_community_announcement(real_name)
 
     for message in user_messages:
-        Slack.post_message(user_id, message, as_user=True)
+        Slack.post_message(user_id, message)
 
     Slack.post_message(app.config['COMMUNITY_CHANNEL'], community_message)
 

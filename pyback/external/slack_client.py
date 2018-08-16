@@ -24,7 +24,7 @@ class Slack:
 
     @classmethod
     def post_message(cls, channel, message, **kwargs):
-        return cls.api_call('chat.postMessage', channel=channel, **message, **kwargs)
+        return cls.api_call('chat.postMessage', channel=channel, username='test2bot', **message, **kwargs)
 
     @classmethod
     def update_message(cls, **kwargs):

@@ -1,14 +1,14 @@
 import logging
 from threading import Thread
 
-from flask import request, make_response, json, redirect, url_for
+from flask import request, make_response, json
 
 from pyback import app
 from pyback.handlers.slash_command_handlers import can_view_logs, get_temporary_url, handle_log_view
 from pyback.utils.routing_validators import validate_request, url_verification_check
 from .router import route_request
 
-logger = logging.getLogger(__name__)
+logger = app.logger
 
 
 @app.route('/slack_event', methods=['POST'])

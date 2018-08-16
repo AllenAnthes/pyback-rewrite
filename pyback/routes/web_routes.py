@@ -1,17 +1,15 @@
-import os
-
+from flask import render_template, redirect, url_for, request, flash, jsonify
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_login import login_required
-from werkzeug.utils import secure_filename
 
 from pyback import app
-
-from flask import render_template, redirect, url_for, request, jsonify
-
-from pyback.handlers.handle_code_school import handle_recaptcha_and_errors, handle_code_school
+from pyback.handlers.handle_code_school import handle_submission, get_logo
+from pyback.handlers.message_handlers import get_messages
 from pyback.handlers.slash_command_handlers import render_logs
 from pyback.utils.forms import CodeSchoolForm
+
+logger = app.logger
 
 limiter = Limiter(
     app,
@@ -32,19 +30,25 @@ def index():
     return render_template('index.html', title='Home')
 
 
-@app.route('/school', methods=['GET', 'POST'])
+@app.route('/new_school', methods=['GET', 'POST'])
 @limiter.limit("5/hour;1/minute")
-def school():
+def code_school():
     form = CodeSchoolForm()
     if form.validate_on_submit():
-        f = form.logo.data
-        filename = secure_filename(f.filename)
-        filepath = os.path.join(app.static_folder, 'logos', filename)
-        f.save(filepath)
-        return jsonify(
-            {"redirect": 'https://github.com/AllenAnthes/Database-Project-Front-end/issues', 'code': 302})
+        return handle_submission(form)
+    return render_template("code-school.html", title='Code School Request', form=form)
 
-    return render_template("school.html", title='Code School Request', form=form)
+@app.route('/messages', methods=['GET'])
+@login_required
+def messages():
+    return get_messages()
+
+@app.route('/images/<filename>')
+def route_get_logo(filename):
+    """
+    Fetches stored image.  Used for codeschool icons.
+    """
+    return get_logo(filename)
 
 
 @app.route('/404')

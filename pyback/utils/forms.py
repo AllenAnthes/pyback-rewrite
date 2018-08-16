@@ -9,13 +9,16 @@ class CodeSchoolForm(FlaskForm):
     fulltime = BooleanField('Fulltime available?')
     hardware = BooleanField('Hardware included?')
     has_online = BooleanField('Online Offered?')
-    only_online = BooleanField('Only online?')
+    only_online = BooleanField('Online only?')
     accredited = BooleanField('VA Accredited?')
+    housing = BooleanField('Housing Included?')
+    mooc = BooleanField('MOOC Only?')
+
 
     rep_name = StringField('School Representative', [validators.required()])
     rep_email = StringField('Representative Email', [validators.required()])
     address1 = StringField('Address Line 1', [validators.required()])
-    address2 = StringField('Address Line 2', [validators.required()])
+    address2 = StringField('Address Line 2')
     city = StringField('City', [validators.required()])
     state = StringField('State', [validators.required()])
     zipcode = StringField('Zipcode', [validators.required()])

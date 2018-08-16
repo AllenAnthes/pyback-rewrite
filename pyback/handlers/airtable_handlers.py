@@ -4,6 +4,7 @@ from pyback.external.slack_client import Slack
 from pyback.utils.mentor_request_messages import new_request_announcement, request_details, matching_mentors
 
 channel = app.config['MENTORS_INTERNAL_CHANNEL']
+logger = app.logger
 
 
 def mentor_request(email, slack_user, record, service, requested_mentor: str = None, skillsets: str = None,

@@ -1,80 +1,102 @@
-import json
-import pprint
+from textwrap import dedent
 
-from flask import render_template, jsonify
+from flask import request, after_this_request, send_file, jsonify
+from werkzeug.utils import secure_filename
+from os import path, remove
+from urllib import parse
 import requests
+import json
+
 from pyback import app
-from pyback.utils.forms import CodeSchoolForm
+
+logger = app.logger
 
 configs = app.config
-recaptcha_secret = configs['RECAPTCHA_SECRET']
 github_jwt = configs['GITHUB_JWT']
+repo_path = configs['GITHUB_REPO_PATH']
+url = f'https://api.github.com/repos/{repo_path}/issues'
+headers = {"Authorization": f"Bearer {github_jwt}"}
 
 
-def handle_code_school():
-    return render_template("code_school.html", title='Code School Request')
+def handle_submission(form):
+    save_logo(form.logo.data)
 
-
-def verify_recaptcha(ip_value, recaptcha_value):
-    req = requests.post('https://www.google.com/recaptcha/api/siteverify',
-                        data={'secret': recaptcha_secret,
-                              'response': recaptcha_value,
-                              'remoteip': ip_value})
-
-    return req.json().get('success', False)
-
-
-def handle_recaptcha_and_errors(request, imagefile):
-    request_dict = request.form.to_dict()
-
-    recaptcha_val = request_dict.pop('g-recaptcha-response')
-    ip_value = request.remote_addr
-    if verify_recaptcha(ip_value, recaptcha_val):
-        res = create_issue(request_dict, imagefile.filename, url_root=request.url_root)
-        if res.status_code == 201:
-            return jsonify(
-                {"redirect": 'https://github.com/AllenAnthes/Database-Project-Front-end/issues', 'code': 302})
-    return ''
-
-
-def create_issue(request_dict, logo, url_root):
-    url = 'https://api.github.com/repos/AllenAnthes/Database-Project-Front-end/issues'
-    headers = {"Authorization": f"Bearer {github_jwt}"}
-
-    params = make_params(**request_dict, url_root=url_root, school_logo=logo)
-    pprint.pprint(params)
+    params = make_params(**form.data)
     res = requests.post(url, headers=headers, data=json.dumps(params))
-    pprint.pprint(res)
-    return res
+
+    if res.ok:
+        return jsonify({'redirect': f'https://github.com/{repo_path}/issues'})
+    else:
+        return res.reason
 
 
-def make_params(name, url, address1, address2, city, state, zipcode, country, rep_name,
-                rep_email, school_logo, url_root, fulltime=False, hardware=False, has_online=False, online_only=False,
-                va_accepted=False, g_captcha_response=False):
-    fulltime = False if not fulltime else True
-    hardware = False if not hardware else True
-    has_online = False if not has_online else True
-    online_only = False if not online_only else True
-    va_accepted = False if not va_accepted else True
+def save_logo(file):
+    filename = secure_filename(file.filename)
+    filepath = path.join(app.static_folder, 'logos', filename)
+    file.save(filepath)
+
+
+def get_logo_and_users(logo):
+    school_logo = parse.quote(secure_filename(logo.filename))
+    if configs['ENV'] == 'development':
+        # users = '@wimo7083 @AllenAnthes,'
+        users = '@AllenAnthes,'
+        logo_url = f'https://pybot.ngrok.io/images/{school_logo}\n'
+        return logo_url, users
+    else:
+        url_root = request.url_root
+        # users = '@hpjaj @wimo7083 @jhampton @kylemh @davidmolina @nellshamrell @hollomancer @maggi-oc'
+        users = ''
+        logo_url = f'{url_root}images/{school_logo}'
+        return logo_url, users
+
+
+def get_logo(filename):
+    filepath = path.join(app.static_folder, 'logos', filename)
+    file_handle = open(path.normpath(filepath), 'r')
+
+    @after_this_request
+    def remove_file(response):
+        try:
+            remove(filepath)
+            file_handle.close()
+        except Exception as error:
+            logger.exception("Error removing or closing downloaded file handle", error)
+        return response
+
+    return send_file(filepath)
+
+
+def make_params(logo, name, url, address1, city, state, zipcode, country, rep_name, rep_email, csrf_token, recaptcha,
+                address2=None, fulltime=False, hardware=False, has_online=False, only_online=False, accredited=False,
+                housing=False, mooc=False):
+    logo_url, notify_users = get_logo_and_users(logo)
 
     return ({
         'title': f'New Code School Request: {name}',
         'body': (
             f"Name: {name}\n"
-            f"url: {url}\n"
-            f"full_time: {fulltime}\n"
-            f"hardware_included: {hardware}\n"
-            f"has_online: {has_online}\n"
-            f"online_only: {online_only}\n"
-            f"va_accepted: {va_accepted}\n"
-            f"address: {address1} {address2}\n"
-            f"city: {city}\n"
-            f"state: {state}\n"
-            f"country: {country}\n"
-            f"zip: {zipcode}\n\n"
-            f"rep name: {rep_name}\n"
-            f"rep email: {rep_email}\n"
-            f"logo: ![school-logo]({url_root}images/{school_logo})\n"
-            # f"logo: ![school-logo](https://pybot.ngrok.io/images/{school_logo})\n"
+            f"Website: {url}\n"
+            f"Full Time: {fulltime}\n"
+            f"Hardware Included: {hardware}\n"
+            f"Has Online: {has_online}\n"
+            f"Only Online: {only_online}\n"
+            f"VA Accredited: {accredited}\n"
+            f"Housing Included: {housing}\n"
+            f"MOOC Only: {mooc}\n"
+
+            f"Address: {address1} {address2}\n"
+            f"City: {city}\n"
+            f"State: {state}\n"
+            f"Country: {country}\n"
+            f"Zip: {zipcode}\n\n"
+            f"Representative Name: {rep_name}\n"
+            f"Representative Email: {rep_email}\n"
+
+            f"logo: ![school-logo]({logo_url})\n"
+
+            'This code school is ready to be added/updated:\n'
+            f"{notify_users}\n"
+            "Please close this issue once you've added/updated the code school."
         )
     })
