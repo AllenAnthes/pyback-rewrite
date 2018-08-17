@@ -1,10 +1,9 @@
-import logging
 from functools import lru_cache
 
-from requests import get, patch, post
+from requests import get, patch
 from pyback import app
 
-logger = logging.getLogger(__name__)
+logger = app.logger
 configs = app.config
 
 BASE = configs['AIRTABLE_BASE_KEY']
@@ -13,9 +12,11 @@ MENTORS_TABLE_NAME = "Mentors"
 REQUEST_TABLE_NAME = "Mentor Request"
 auth_header = {f'authorization': f"Bearer {API_KEY}"}
 
+
 def get_configs():
     with app.app_context():
         return app.config
+
 
 class Airtable:
     services_id_to_service = {}

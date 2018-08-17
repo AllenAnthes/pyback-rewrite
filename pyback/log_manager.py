@@ -5,7 +5,7 @@ import decouple
 
 
 # https://fangpenlin.com/posts/2012/08/26/good-logging-practice-in-python/
-def setup_logging(default_level=logging.INFO):
+def setup_logging(default_level=logging.DEBUG):
     if not os.path.exists('logs'):
         os.mkdir('logs')
 

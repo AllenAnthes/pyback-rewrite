@@ -1,10 +1,10 @@
 import logging
 from threading import Thread
 
-from flask import request, make_response, json
+from flask import request, make_response, json, render_template
 
 from pyback import app
-from pyback.handlers.slash_command_handlers import can_view_logs, get_temporary_url, handle_log_view
+from pyback.handlers.slash_command_handlers import can_view_logs, get_temporary_url
 from pyback.utils.routing_validators import validate_request, url_verification_check
 from .router import route_request
 
@@ -59,10 +59,3 @@ def route_logs():
     return make_response(f'{request.host_url}logs/{url.url}', 200)
 
 
-@app.route("/logs/<variable>")
-def show_logs(variable):
-    """
-    Routes user to log
-    :param variable:  Randomly generated string
-    """
-    return handle_log_view(variable)

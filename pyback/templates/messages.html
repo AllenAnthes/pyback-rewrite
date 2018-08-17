@@ -8,23 +8,23 @@
     <table id="message-table" class="table table-striped table-bordered" cellspacing="0" width="100%">
         <thead>
         <tr>
-            <th class="th-sm">Timestamp
-            </th>
-            <th class="th-sm">Channel
-            </th>
-            <th class="th-sm">Message
-            </th>
-            <th class="th-sm">Remove
-            </th>
+            <th class="th-sm">Timestamp</th>
+            <th class="th-sm">Channel</th>
+            <th class="th-sm">Message</th>
+            <th class="th-sm">Remove</th>
         </tr>
         </thead>
         <tbody>
         {% for message in messages %}
             <tr>
-                <td>{{ message.ts }}</td>
-                <td>{{ message.channel }}</td>
+                <td>{{ message.ts | timestamp }}</td>
+                <td>{{ message.channel_name }}</td>
                 <td>{{ message.text }}</td>
-                <td>Delete</td>
+                <td>
+                    <button class="btn btn-sm btn-danger delete-btn" data-delete="{{ message.delete_url }}">
+                        Delete
+                    </button>
+                </td>
             </tr>
         {% endfor %}
         </tbody>

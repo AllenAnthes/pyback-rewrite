@@ -5,7 +5,7 @@ from pyback import app
 
 from slackclient import SlackClient
 
-logger = logging.getLogger(__name__)
+logger = app.logger
 
 configs = app.config
 
@@ -19,7 +19,7 @@ class Slack:
     @classmethod
     def api_call(cls, method, **kwargs):
         result = cls.client.api_call(method, **kwargs)
-        logger.info(f'API call method: {method} || Result: {result}')
+        logger.debug(f'API call method: {method} || Result: {result}')
         return result
 
     @classmethod
@@ -29,6 +29,10 @@ class Slack:
     @classmethod
     def update_message(cls, **kwargs):
         return cls.api_call('chat.update', **kwargs)
+
+    @classmethod
+    def delete_message(cls, ts, channel):
+        return cls.api_call('chat.delete', ts=ts, channel=channel)
 
     @classmethod
     def open_dialog(cls, **kwargs):
@@ -62,3 +66,8 @@ class Slack:
     @classmethod
     def user_info_from_id(cls, user_id: str):
         return cls.api_call('users.info', user=user_id)
+
+    @classmethod
+    def get_bot_name(cls):
+        res = cls.api_call('auth.test')
+        return res['user']

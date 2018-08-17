@@ -1,7 +1,6 @@
-import logging
 from os import environ, path
 
-from flask import Flask
+from flask import Flask, logging
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -14,9 +13,10 @@ db = SQLAlchemy()
 migrate = Migrate()
 security = Security()
 
-setup_logging(logging.DEBUG)
+setup_logging()
 app = Flask(__name__)
-logger = logging.getLogger()
+logger = logging.create_logger(app)
+logger.setLevel('DEBUG')
 
 # Load the default configuration
 app.config.from_object('config.default')
@@ -32,12 +32,11 @@ app.config['SECURITY_REGISTERABLE'] = True
 app.config['SECURITY_REGISTER_URL'] = '/signup'
 app.secret_key = 'mega-secret'
 
-
 db.init_app(app)
 migrate.init_app(app, db)
 bootstrap.init_app(app)
 
-from .routes import slack_routes, web_routes
+from .routes import slack_routes, web_view_routes, web_api_routes
 from pyback.database import models, web_models
 
 user_datastore = SQLAlchemyUserDatastore(db, web_models.WebUser, web_models.Role)
