@@ -36,16 +36,16 @@ db.init_app(app)
 migrate.init_app(app, db)
 bootstrap.init_app(app)
 
-from .routes import slack_routes, web_view_routes, web_api_routes
+from pyback.routes import slack_routes, web_view_routes, web_api_routes
 from pyback.database import models, web_models
 
 user_datastore = SQLAlchemyUserDatastore(db, web_models.WebUser, web_models.Role)
 security.init_app(app, user_datastore)
 
 # # Create a user to test with
-# from flask_security.utils import hash_password
-# @app.before_first_request
-# def create_user():
-#     db.create_all()
-#     user_datastore.create_user(email='Will', password=hash_password('loserface'))
-#     db.session.commit()
+from flask_security.utils import hash_password
+@app.before_first_request
+def create_user():
+    db.create_all()
+    user_datastore.create_user(email='Will', password=hash_password('loserface'))
+    db.session.commit()

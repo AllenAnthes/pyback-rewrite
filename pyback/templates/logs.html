@@ -16,19 +16,11 @@
 {% block scripts %}
     {{ super() }}
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.js"></script>
-
+    <script src="{{ url_for('static', filename='js/logs.js') }}"></script>
     <script>
-    {#const level = {{ level }}#}
-
-        $(document).ready(() => {
-            $('#logs').DataTable({
-                order: [],
-                pageLength: 250,
-                lengthMenu: [[50, 100, 250, 500], [50, 100, 250, 500]],
-                columns: [{title: 'Log', data: 'log'}],
-                ajax: `/api/logs/debug`
-            });
-        })
+        {#  Declared here so it can be accessed in logs.js   #}
+        const level = '{{ level }}';
     </script>
+
 {% endblock %}
 
