@@ -1,5 +1,17 @@
 $(document).ready(() => {
-    const $table = $('#message-table').DataTable({order: [[0, 'desc']], iDisplayLength: 100});
+    const $table = $('#message-table').DataTable({
+        order: [[0, 'desc']],
+        pageLength: 100,
+        ajax: '/api/botMessages',
+        columns: [
+            {title: 'Timestamp', data: 'ts', render: renderTimestamp},
+            {title: 'Channel', data: 'channel'},
+            {title: 'Message', data: 'text'},
+            {title: 'Remove', data: 'delete_url', render: renderMessage},
+        ],
+        responsive: true,
+    });
+
     $(document).on('click', '.delete-btn', deleteMessage);
 
     async function deleteMessage(e) {
@@ -17,6 +29,17 @@ $(document).ready(() => {
         $table.row($row)
             .remove()
             .draw()
+    }
+
+    function renderTimestamp(data) {
+        return new Date(data * 1e3).toUTCString()
+    }
+
+    function renderMessage(data) {
+        return `
+                <button class="btn btn-sm btn-danger delete-btn" data-delete=${data}>
+                    Delete
+                </button>`;
     }
 });
 

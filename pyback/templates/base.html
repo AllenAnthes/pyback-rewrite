@@ -1,22 +1,25 @@
-{% extends 'bootstrap/base.html' %}
+{% import "_macros.html" as util %}
+<!doctype html>
+<head>
+    {% block styles %}
+        <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon-16x16.png') }}">
 
-{% block styles %}
-    <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon-16x16.png') }}">
-    <link href="{{ bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap') }}" rel="stylesheet">
-
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.9/css/mdb.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
-    <link href="{{ url_for('static', filename='css/common.css') }}" rel="stylesheet">
-
-{% endblock %}
-
-{% block title %}
-    {% if title %}{{ title }} - Pyback UI{% else %}Welcome to Pyback{% endif %}
-{% endblock %}
-
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.9/css/mdb.min.css">
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
+        <link href="{{ url_for('static', filename='css/common.css') }}" rel="stylesheet">
+    {% endblock %}
+    {% block title %}
+        <title>{% if title %}{{ title }} - Pyback UI{% else %}Pyback UI{% endif %}</title>
+    {% endblock %}
+</head>
+<body>
 {% block navbar %}
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="{{ url_for('index') }}">
+        <a class="navbar-brand" href="{{ url_for('web.index') }}">
             <img src="{{ url_for('static', filename='img/slate.png') }}" width="30" alt="">
             Pyback
         </a>
@@ -27,28 +30,19 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('index') }}">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('code_school') }}">New Codeschool</a>
-                </li>
+                {{ util.navlink('web.index', 'Home') }}
+                {{ util.navlink('web.code_school', 'New Codeschool') }}
                 {% if current_user.is_authenticated %}
-                    {#                                        <li><a href="{{ url_for('pybot_posts') }}">Messages</a></li>#}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('admin_logs') }}">Logs</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('messages') }}">Bot Messages</a>
-                    </li>
+                    {{ util.navlink('user.index_view', 'User Admin') }}
+                    {{ util.navlink('web.admin_logs', 'Logs') }}
+                    {{ util.navlink('web.messages', 'Bot Messages') }}
                 {% endif %}
             </ul>
             <ul class="nav navbar-nav">
                 {% if current_user.is_anonymous %}
-                    <li><a class="nav-link" href="{{ url_for('security.login') }}">Login</a></li>
-                    {#                    <li><a class="nav-link" href="{{ url_for('security.register') }}">Register</a></li>#}
+                    {{ util.navlink('security.login', 'Login') }}
                 {% else %}
-                    <li><a class="nav-link" href="{{ url_for('security.logout') }}">Logout</a></li>
+                    {{ util.navlink('security.logout', 'Logout') }}
                 {% endif %}
             </ul>
         </div>
@@ -56,7 +50,7 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container">
+    <div class="container-fluid">
         {% with messages = get_flashed_messages() %}
             {% if messages %}
                 {% for message in messages %}
@@ -68,9 +62,15 @@
     </div>
 {% endblock %}
 
-{% block scripts %}
-    {{ super() }}
-    <script type="text/javascript"
-            src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.9/js/mdb.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
-{% endblock %}
+<footer>
+    {% block footer %}
+        {% block scripts %}
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js"></script>
+            <script type="text/javascript"
+                    src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.9/js/mdb.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
+        {% endblock %}
+    {% endblock %}
+</footer>
+</body>

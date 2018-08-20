@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.ravenjs.com/2.3.0/raven.min.js"></script>
+    <title>Title</title>
+</head>
+<body>
+
+{% if event_id %}
+  <script>
+  Raven.showReportDialog({
+    eventId: '{{ event_id }}',
+    dsn: '{{ public_dsn }}'
+  });
+  </script>
+{% endif %}
+
+</body>
+</html>

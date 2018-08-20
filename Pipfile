@@ -5,7 +5,9 @@ name = "pypi"
 
 [packages]
 bcrypt = "*"
+eventlet = "*"
 Flask = "*"
+Flask-Admin = "*"
 Flask-Cors = "*"
 Flask-Debug = "*"
 Flask-Limiter = "*"
@@ -19,8 +21,11 @@ psycopg2 = "*"
 python-decouple = "*"
 python-dotenv = "*"
 slackclient = "*"
+"raven[flask]" = "*"
 
 [dev-packages]
+pytest = "*"
+pytest-flask = "*"
 
 [requires]
 python_version = "3.6"

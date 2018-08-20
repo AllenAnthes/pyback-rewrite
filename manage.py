@@ -1,7 +1,9 @@
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 
-from pyback import app, db
+from pyback import create_app, db
+
+app = create_app()
 
 migrate = Migrate(app, db)
 

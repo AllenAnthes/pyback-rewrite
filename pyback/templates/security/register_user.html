@@ -1,32 +1,4 @@
 {% extends "base.html" %}
-{% import "bootstrap/wtf.html" as wtf %}
-
-{% block styles %}
-    {{ super() }}
-    <link href="{{ url_for('static', filename='css/auth.css') }}" rel="stylesheet">
-{% endblock %}
-
-
-{% block title %}
-    Register
-{% endblock %}
-
-{#{% block form_content %}#}
-    {#    <h1>Register</h1>#}
-    {#        {{ wtf.quick_form(register_user_form, extra_classes="md-form") }}#}
-{#    <form action="{{ url_for('security.register') }}" method="POST" class="" name="register_user_form">#}
-{#        {{ register_user_form.hidden_tag() }}#}
-{##}
-{#        {{ wtf.form_errors(register_user_form) }}#}
-{#        #}
-{#        #}
-{#        <div class="md-form">{{ wtf.form_field(register_user_form.email) }}</div>#}
-{#        <div class="md-form">{{ wtf.form_field(register_user_form.password) }}</div>#}
-{#        <div class="md-form">{{ wtf.form_field(register_user_form.password_confirm) }}</div>#}
-{#        {{ wtf.form_field(register_user_form.submit) }}#}
-        {##}
-{#    </form>#}
-{#{% endblock %}#}
 
 {% block app_content %}
     <div class="card mt-5 auth-card">

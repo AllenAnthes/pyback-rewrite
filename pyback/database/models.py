@@ -1,26 +1,37 @@
-from uuid import uuid4
+from flask_security import RoleMixin, UserMixin
 
 from pyback import db
 
+roles_users = db.Table('roles_users',
+                       db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
+                       db.Column('role_id', db.Integer(), db.ForeignKey('role.id')))
 
-class TemporaryUrl(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    slack_user = db.Column(db.String(64), index=True, unique=True)
-    url = db.Column(db.String, default=lambda: uuid4().hex, unique=True)
-    level = db.Column(db.String(32), default="info")
-    created_on = db.Column(db.DateTime, server_default=db.func.now())
+
+class Role(db.Model, RoleMixin):
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(80), unique=True)
+    description = db.Column(db.String(255))
+
+    def __str__(self):
+        return self.name
 
     def __repr__(self):
-        return f"<Temp URL for {self.slack_user}: {self.url} created at {self.created_on}>"
+        return f'id: {self.id} | name: {self.name} | description: {self.description}'
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(255), unique=True)
     slack_id = db.Column(db.String(32), index=True, unique=True)
     slack_name = db.Column(db.String(32), index=True)
-    access_logs = db.Column(db.Boolean, default=False)
-    can_test = db.Column(db.Boolean, default=False)
+    password = db.Column(db.String(255))
+    active = db.Column(db.Boolean())
+    confirmed_at = db.Column(db.DateTime())
+    roles = db.relationship('Role', secondary=roles_users,
+                            backref=db.backref('users', lazy='dynamic'))
 
-    def __repr__(self) -> str:
-        return f'<User id:{self.id} | slack_id: {self.slack_id} | slack_name: {self.slack_name} |' \
-               f' access_logs: {self.access_logs}>'
+    def __repr__(self):
+        return f'id: {self.id} | email: {self.email} | roles: {self.roles}'
+
+    def __str__(self):
+        return self.email

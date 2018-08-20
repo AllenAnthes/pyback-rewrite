@@ -24,3 +24,26 @@
         </div>
     {% endif %}
 {% endmacro %}
+
+{% macro add_fields() %}
+    {% for field in varargs %}
+        {{ form_field(field) }}
+    {% endfor %}
+{% endmacro %}
+
+
+{% macro navlink(method_name, label) %}
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for(method_name) }}">{{ label }}</a>
+    </li>
+{% endmacro %}
+
+{% macro errors(errors) %}
+    {% if errors %}
+        <div class="invalid">
+            {% for error in errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endmacro %}

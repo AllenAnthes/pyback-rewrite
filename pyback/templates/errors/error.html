@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block styles %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/status.css') }}">
+{% endblock %}
+
+{% block app_content %}
+    <div class="m-5 status-text">
+        <h1>{{ name }}
+            <small>Error {{ code }}</small>
+        </h1>
+        <p class="lead">{{ message }}</p>
+    </div>
+{% endblock %}
+
+{% block footer %}
+{#    <p>Technical Contact: <a href="mailto:x@example.com">x@example.com</a></p>#}
+    {{ super() }}
+{% endblock %}
