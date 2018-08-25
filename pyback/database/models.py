@@ -6,6 +6,11 @@ roles_users = db.Table('roles_users',
                        db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
                        db.Column('role_id', db.Integer(), db.ForeignKey('role.id')))
 
+channel_mods = db.Table('channels_mods',
+                        db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+                        db.Column('channel_id', db.Integer, db.ForeignKey('channel.id'))
+                        )
+
 
 class Role(db.Model, RoleMixin):
     id = db.Column(db.Integer(), primary_key=True)
@@ -35,3 +40,10 @@ class User(db.Model, UserMixin):
 
     def __str__(self):
         return self.email
+
+
+class Channel(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), nullable=False)
+    channel_id = db.Column(db.String(32), nullable=False)
+    mods = db.relationship("User", secondary=channel_mods)

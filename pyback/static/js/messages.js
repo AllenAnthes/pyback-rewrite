@@ -11,6 +11,7 @@ $(document).ready(() => {
         ],
         responsive: true,
     });
+    $('#message-table_wrapper').addClass('bs-select');
 
     $(document).on('click', '.delete-btn', deleteMessage);
 

@@ -4,7 +4,7 @@ from flask_login import current_user
 from werkzeug.utils import redirect
 
 from pyback import admin, db
-from pyback.database.models import User, Role
+from pyback.database.models import User, Role, Channel
 
 
 class MyModelView(sqla.ModelView):
@@ -32,3 +32,4 @@ class MyModelView(sqla.ModelView):
 
 admin.add_view(MyModelView(User, db.session))
 admin.add_view(MyModelView(Role, db.session))
+admin.add_view(MyModelView(Channel, db.session))

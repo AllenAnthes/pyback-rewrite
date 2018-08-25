@@ -1,0 +1,15 @@
+sudo: required
+
+language: python
+
+cache: pip
+
+os: linux
+
+python: 3.6
+
+services: postgresql
+
+install: pipenv install --dev
+
+script: pytest

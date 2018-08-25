@@ -6,8 +6,7 @@ from flask_security import roles_required
 from werkzeug.local import LocalProxy
 
 from pyback.web import bp
-from pyback.web.forms import CodeSchoolForm
-from pyback.web.handlers import handle_submission
+from pyback.web.codeschool_form import CodeSchoolForm, handle_submission
 
 logger = LocalProxy(lambda: current_app.logger)
 

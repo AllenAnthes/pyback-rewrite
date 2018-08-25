@@ -52,7 +52,7 @@ def base_claim_message(original_message, channel_id, message_ts):
     }
 
 
-def mentee_claimed(user_id: str, record: str) -> List[dict]:
+def mentee_claimed_message(user_id: str, record: str) -> List[dict]:
     return [{
         "text": f":100: Request claimed by <@{user_id}>:100:\n"
                 f"<!date^{now()}^Claimed at {{date_num}} {{time_secs}}|Failed to parse time>",

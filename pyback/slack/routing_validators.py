@@ -17,12 +17,12 @@ def validate_request(key_name, valid_key, request_type):
                     data = request.values
                 else:
                     data = request.json
-                if key_name in data.keys() and data[key_name] != valid_key:
+                if key_name not in data.keys() or data[key_name] != valid_key:
                     return redirect('error.html', code=403)
 
             except Exception as ex:
                 logger.exception('Exception thrown when validating request key', ex)
-                return redirect('400.html', code=400)
+                return redirect('error.html', code=403)
 
             return func(*args, **kwargs)
 

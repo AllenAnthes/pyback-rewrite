@@ -1,5 +1,7 @@
 from decouple import config
 
+DEBUG = True
+
 SECRET_KEY = config('DEV_SECRET_KEY', default='secret yo')
 
 TOKEN = config('DEV_BOT_TOKEN', default='token')

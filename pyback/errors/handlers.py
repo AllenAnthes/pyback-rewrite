@@ -5,6 +5,7 @@ from pyback.errors import bp
 
 logger = LocalProxy(lambda: current_app.logger)
 
+
 @bp.app_errorhandler(404)
 def page_not_found(error):
     logger.info('404')

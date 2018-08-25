@@ -8,6 +8,7 @@ bcrypt = "*"
 eventlet = "*"
 Flask = "*"
 Flask-Admin = "*"
+Flask-Bootstrap = "*"
 Flask-Cors = "*"
 Flask-Debug = "*"
 Flask-Limiter = "*"
@@ -21,11 +22,12 @@ psycopg2 = "*"
 python-decouple = "*"
 python-dotenv = "*"
 slackclient = "*"
+"slack-sansio[requests]" = "*"
 "raven[flask]" = "*"
 
 [dev-packages]
-pytest = "*"
 pytest-flask = "*"
+pytest-mock = "*"
 
 [requires]
 python_version = "3.6"

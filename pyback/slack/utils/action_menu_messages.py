@@ -1,4 +1,4 @@
-def suggestion_modal(trigger_id):
+def suggestion_modal_message(trigger_id):
     return {
         'trigger_id': trigger_id,
         'dialog': {

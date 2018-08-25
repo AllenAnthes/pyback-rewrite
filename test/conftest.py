@@ -13,6 +13,7 @@ def app():
     # create the app with common test config
     app = create_app({
         'TESTING': True,
+        'LOGIN_DISABLED': True,
         'WTF_CSRF_ENABLED': False,
         'DATABASE': db_path,
     })
